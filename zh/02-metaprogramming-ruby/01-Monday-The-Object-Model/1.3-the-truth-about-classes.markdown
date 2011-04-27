@@ -1,47 +1,22 @@
 1.3 关于类的真相
 ---------------------------
 
-*这里，比尔揭示了关于对象，类和常量令人吃惊的事实.*
+*这里，比尔揭示了关于对象，类和常量的惊人事实.*
 
-“At this stage,” Bill observes, “it’s probably a good idea to take a break
-from coding and give a long, hard look at the theory behind Ruby
-classes.” He warns you that this will be a lot of theory in a single shot
-and adds that there is no escaping this if you want to understand the
-mechanics behind Ruby classes and objects.
+“现在”， 比尔说， “我们最好还是停止编码休息一下吧， 顺便花点时间来看看Ruby类背后的理论”. 他正襟危坐， “这次一下就是一大堆理论，如果你你真想理解Ruby类和对象背后的机制，这部分是必须要学习的，可别偷懒！”
 
-“I’ll be asking for your full attention, so let’s go find a quiet place to
-talk.” He grabs your arm and hustles you to the conference room.
+“我想要你集中全部精力，所以我们去找个安静的地方去谈吧。” 他抓起你的胳膊就把你拽进了会议室。
 
-> **Is Monkeypatching Evil?**
+> **Monkeypatching是邪恶的?**
 
->In Section 1.2, Monkey See, Monkey Patch, on the previous
->page, Bill told you that Monkeypatch is a derogatory term.
->However, the same term is sometimes used in a positive sense,
->to refer to Open Classes (31) in general. You might argue that
->there are two types of Monkeypatches (33). Some happen by
->mistake, like the one that you and Bill experienced, and they’re
->invariably evil. Others are applied on purpose, and they’re
->quite useful—especially when you want to bend an existing
->library to your needs.
+>在前一页1.2节中标题为 Monkey See, Monkey Patch 的那段里， 比尔告诉过你Monkeypatch是一个贬义词。
+>然而， 这个词有时也被用在积极场景，一般是指开放类（31页）。你可以认为有两种类型的Monkeypatches (33). 有些导致错误， 像你和比尔经历过的， 而且，它们总是邪恶的。 另外一些则是存心就这么来用， 并且它们十分有用 - 尤其是当你想按需禁用(bend)一个存在的库的时候。
 
->Even when you think you’re in control, you should still Monkeypatch
->with care. Like any other global modification, Monkeypatches
->can be difficult to track in a large code base. (Some
->languages solve this problem with selector namespaces, which
->are like Monkeypatches confined to a limited scope. This feature
->might eventually find its way into Ruby 2.0—but don’t hold
->your breath.)
+>即使你认为一切都尽在掌握， 你还是应该小心的使用Monkeypatch。 和任何全局性修改类似， 在一个大型的代码库中，Monkeypatches很难被跟踪。 (一些语言使用命名空间选择器（selector namespaces）来解决这个问题, 这种方式就像是被局限到小范围的Monkeypatches. 这种特性可能被Ruby2.0实现，但是还是别报太大期望了。)
 
->So, Monkeypatches are useful but also dangerous. How do you
->minimize their dangers while still reaping their benefits? Carefully
->check the existing methods in a class before you define
->your own methods. Be aware that some changes are riskier
->than others. For example, adding a new method is usually safer
->than modifying an existing one. Also, test your code thoroughly.
->You’ll see more defensive techniques to manage Monkeypatches
->in Section 9.2, Defusing Monkeypatches, on page 232.
+>所以, Monkeypatches真是让人又爱又怕. 那么你如何安全的去使用这种方式呢？在你定义你自己的方法之前，要仔细的检查这个类中存在的方法。你应该认识到，某些变化是有更高风险的。例如， 增加一个新方法通常是比修改一个现有方法更安全些。此外，需要彻底的测试你的代码。在232页的9.2节，你将会看到更多管理Monkeypatches的技术
 
-**What’s in an Object**
+**解剖对象**
 
 “Let’s start with the basics: objects and classes,” Bill announces as you
 take your place in the conference room. He opens his laptop, launches
