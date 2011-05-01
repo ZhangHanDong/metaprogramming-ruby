@@ -18,9 +18,7 @@
 
 **解剖对象**
 
-“Let’s start with the basics: objects and classes,” Bill announces as you
-take your place in the conference room. He opens his laptop, launches
-irb, and types some code:
+“让我们从基础开始：: 对象和类,” 比尔带你到了会议室后随即宣布. 他打开了笔记本， 运行了irb, 开始键入一些代码:
 
     class MyClass
       def my_method
@@ -30,135 +28,80 @@ irb, and types some code:
     obj = MyClass.new
     obj.class # => MyClass
 
-Bill homes in on the obj object. If you could open the Ruby interpreter and look into obj, what would you see?
+比尔构建了一个obj对象.如果你能打开Ruby解释器并且调查obj， 你会看到什么？
 
-**Instance Variables**
+**实例变量**
 
-Most importantly, objects contain instance variables. You’re not really
-supposed to peek at them, but you can do that anyway by calling
-Object#instance_variables( ). Bill’s example object has just a single instance
-variable:
+最重要的是， 对象包含实例变量。当然你不能真正的去窥视一个对象， 但你能通过调用Object#instance_variables()方法来达到此目的。 比尔的例子只有一个实例变量:
 
     obj.my_method
     obj.instance_variables # => [:@v]
 
-Unlike in Java or other static languages, in Ruby there is no connection
-between an object’s class and its instance variables. Instance variables
-just spring into existence when you assign them a value, so you can
-have objects of the same class that carry different sets of instance variables.
+不像Java或者其他静态语言， Ruby里一个对象的类和它的实例变量之间并没有什么关联。 实例变量只有在当你给它分配了一个值的时候才产生，所以你才能给同一个类对象的实例变量进行不同的设置。
 
-For example, if Bill hadn’t called obj.my_method( ), then obj would
-have no instance variable at all. You can think of the names and values
-of instance variables as keys and values in a hash. Both the keys and
-the values can be different for each object.
+例如，如果比尔还没有调用obj.my_method()方法， 那么obj就根本不会有实例变量存在。你可以把实例变量的名字和值想象为一个hash的键和值。
 
-Bill stretches his arms in an attempt at dramatic gesturing. “That’s all
-there is to know about instance variables really. Now, let’s move on to
-methods.”
+比尔戏剧化的扬了扬手， 并说 “这真的是我知道关于实例变量的全部了。 现在，让我们移步到方法。”
 
-**Methods**
+**方法**
 
-Besides having instance variables, objects also have methods. You can
-get a list of an object’s methods by calling Object#methods( ). Most objects
-(including obj in Bill’s example code) inherit a number of methods
-from Object, so this list of methods is usually quite long. Bill uses
-Array#grep( ) to show you that my_method( ) is in obj’s list:3
+对象除了有'实例变量'之外,还有'方法'。 通过调用Object#methods()方法，你可以得到一个对象的方法列表。 大多数的对象（包括比尔的那个例子），都从Object继承了一批方法，所以这个方法列表通常都十分长。 比尔用了Array#grep()方法去给你显示obj对象方法列表中的my_method()方法:
 
     obj.methods.grep(/my/) # => [:my_method]
 
-If you could pry open the Ruby interpreter and look into obj, you’d
-notice that this object doesn’t really carry a list of methods. On the
-inside, an object simply contains its instance variables and a reference
-to its class.4 So, where are the methods?
+如果你能打开Ruby解释器一探obj的究竟， 你会注意到，这个对象并没有真正的方法列表。在其内部，只包含它的实例变量和一份它的类的引用(准确的说，它也保护一个唯一标识符，返回一个对象的object_id(), 还包含一个标记，来标志对象的状态，例如， “污染tainted”与“冻结frozen”)。那么，方法都在哪呢？
 
-*Figure 1.1: Instance variables live in objects, and methods live in
-classes.*
+*图 1.1: 实例变量住在对象里面， 方法在住在类里面*
 
-Bill walks over to the conference-room whiteboard and starts scribbling
-all over it. “Think about it for a minute,” he says, drawing Figure 1.1.
-“Objects that share the same class also share the same methods, so the
-methods must be stored in the class, not the object.”
+比尔走向会议室的白板，开始在上面写写画画。 “思考一分钟，”他说， 并且画下了图1.1的内容。 “对象共享同一个类，也共享相同的方法， 所以这些方法一定是被存储在类里面，而不是对象中。”
 
-While you’re looking at the picture, Bill also takes the chance to highlight
-an important distinction in the terminology. You can rightly say
-that “obj has a method called my_method( ),” meaning that you’re able to
-call obj.my_method(). By contrast, you shouldn’t say that “MyClass has
-a method named my_method( ).” That would be confusing, because it
-would imply that you’re able to call MyClass.my_method() as if it were a
-class method.
+当你看这张图的时候， 比尔不失时机的突出其中的重要区别： 你可以准确的说， “obj有一个叫my_method()的方法，” 这意味着你能这样用 obj.my_method(). 相反，你不能说“MyClass有一个叫my_method()的方法。”这将导致混乱， 因为如果它是一个类的方法， 意味着你能调用MyClass.my_method()。
 
-To remove the ambiguity, you should say that my_method( ) is an
-instance method (not just “a method”) of MyClass, meaning that it’s
-defined in MyClass, and you actually need an instance of MyClass to call
-it. It’s the same method, but when you talk about the class, you call
-it an instance method, and when you talk about the object, you simply
-call it a method. Remember this distinction, and you won’t get confused
-when writing introspective code like this:
+为了消除歧义，你应该说my_method()是MyClass的一个实例方法（不只是一个方法）， 意味着它是在MyClass中被定义的， 并且你需要一个实例变量才能够调用它。 同样是方法， 但是当你讨论类的时候，就需要叫它实例方法， 当你讨论对象的时候，你可以简单叫它方法。 记住这个区别， 当你写下面这种内省方法的时候就不会那么困扰了:
 
     String.instance_methods == "abc".methods # => true
     String.methods == "abc".methods # => false
 
-Bill wraps it all up: an object’s instance variables live in the object itself, and an object’s methods live in the object’s class. That’s why objects of the same class share methods but don’t share instance variables.
+比尔做了一个总结：一个对象的实例变量驻留在对象本身， 一个对象的方法驻留在这个对象的类中。 这就是为什么同一个类的对象共享方法，但是不共享实例变量的原因。
 
-That’s all you really have to know about objects, instance variables, and
-methods. But since he’s brought classes into the picture, Bill suggests
-you take a closer look.
+这就是你必须要掌握的关于对象，实例变量和方法的全部。 但是以为他在图1.1中引入了类， 所以比尔建议你看仔细点。
 
-**Classes Revisited**
+**再探 － 类**
 
-“Now, my friend, this might be the most important thing you’ll ever
-learn about the Ruby object model,” Bill exclaims, pausing for dramatic
-effect. “Classes themselves are nothing but objects.”
+“现在，我们的朋友， 这可能是你学到过关于Ruby对象模型最重要的东西了,” 比尔故作深沉. “就算是类， 也只不过是对象而已。”
 
-Since a class is an object, everything that applies to objects also applies
-to classes. Classes, like any object, have their own class, as instances
-of a class called Class:
+因为类是一个对象， 所以适用于对象的一切，也同样适用于类。 类，像任何对象一样， 有它们自己的类。类只是一个叫Class类的实例:
 
     "hello".class # => String
     String.class # => Class
 
-Like any object, classes also have methods. Remember what Bill covered
-in Section 1.3, What’s in an Object, on page 34? The methods of
-an object are also the instance methods of its class. This means that
-the methods of a class are the instance methods of Class:
+像任何对象一样， 类也有方法。 记住比尔在34页1.3节提到的，对象是什么？ 一个对象的方法页是它的类的实例方法。 这就意味着一个类的方法也是Class的实例方法:
 
     inherited = false
     Class.instance_methods(inherited) # => [:superclass, :allocate, :new]
 
-You already know about new( ), because you use it all the time to create
-objects. The allocate( ) method plays a support role to new( ), and
-superclass( ) does exactly what its name suggests, returning the class’s
-superclass:
+想必你也了解new( ), 因为你一直用它来创建对象。这个allocate( )是new方法的支持方法（译者注：new方法使用allocate来生成实例,使用initialize来完成初始化）, superclass( )，顾名思义， 返回一个类的超类:
 
     String.superclass # => Object
     Object.superclass # => BasicObject
     BasicObject.superclass # => nil
 
-All classes ultimately inherit from Object, which in turn inherits from
-BasicObject, the root of the Ruby class hierarchy.5 Bill also shows you
-the superclass of Class:
+所有的类最终都继承自Object, 而Object又继承自BasicObject, BasicObject是Ruby的顶级类（注:在Ruby1.9之前， Object是Ruby的顶级类， 但是从Ruby1.9开始，引入了BasicObject, 在89页开始，你会了解为什么会引入这个类）。比尔也给你展示了Class的超类:
 
     Class.superclass # => Module
     Module.superclass # => Object
 
-So, a class is just a souped-up module with three additional methods—
-new( ), allocate( ), and superclass( )—that allow you to create objects or
-arrange classes into hierarchies. Apart from these (admittedly important)
-differences, classes and modules are pretty much the same. Most
-of what you will learn about classes also applies to modules, and
-vice versa.
+所以，一个类只是被三个方法new(), allocate()和superclass()增强的module - 允许你去创建类或者是继承类。除了这些差异（当然是重要的）， 类和模块大致相同。 你将学到的关于类的大部分内容都适用于模块，反之亦然。
 
-*Figure 1.2: Classes are just objects*
+*图 1.2: 类只是一个对象*
 
-Bill concludes his lecture on classes with a piece of code and a whiteboard
-diagram:
+比尔用白板上的图和代码片段来总结他的类理论:
 
     class MyClass; end
     obj1 = MyClass.new
     obj2 = MyClass.new
 
-“See?” Bill asks, pointing at the diagram (Figure 1.2). “Classes and regular
-objects live together happily.”
+“看到了吗?” 比尔指着图1.2问道，  “类和正常的对象愉快的相处着.”
 
 According to your programming pal, there’s one last wrinkle in the
 “Classes are objects” theme: just like you do with regular objects, you
